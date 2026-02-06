@@ -22,6 +22,15 @@ func TestHandleGetHeaders(t *testing.T) {
 	})
 
 	t.Run("invalid url format", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/headers?url=invalid-url", nil)
+		rec := httptest.NewRecorder()
+		HandleGetHeaders().ServeHTTP(rec, req)
+
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.JSONEq(t, `{"error": "invalid URL"}`, rec.Body.String())
+	})
+
+	t.Run("valid url", func(t *testing.T) {
 		mockServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			w.Header().Set("X-Custom-Header", "value")
