@@ -3,6 +3,8 @@ package handlers
 import (
 	"net/http"
 	"net/url"
+
+	"github.com/xray-web/web-check-api/checks"
 )
 
 func HandleGetHeaders(h *checks.Headers) http.Handler {
